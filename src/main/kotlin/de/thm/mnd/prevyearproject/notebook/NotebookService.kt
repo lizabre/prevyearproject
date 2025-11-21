@@ -8,7 +8,7 @@ import java.util.UUID
 @Service
 class NotebookService {
 
-    fun createNotebook(newNotebook: CreateNotebook): Notebook {
+    fun createNotebook(newNotebook: Notebook): Notebook {
         val id = UUID.randomUUID()
         val notebook = Notebook(
             id = id,
@@ -28,11 +28,16 @@ class NotebookService {
         return notebooksDb.find { it.id == id }
     }
 
-    fun deleteNotebook(id: UUID) {
-        notebooksDb.removeIf { it.id == id }
+    fun deleteNotebook(id: UUID): Boolean {
+        val existing = notebooksDb.find { it.id == id };
+        if(existing != null) {
+            notebooksDb.remove(existing);
+            return true;
+        }
+        return false;
     }
 
-    fun updateNotebook(id: UUID, updatedNotebook: UpdateNotebook): Notebook? {
+    fun updateNotebook(id: UUID, updatedNotebook: Notebook): Notebook? {
         val index = notebooksDb.indexOfFirst { it.id == id}
         if (index != -1) {
             val notebookToUpdate = notebooksDb[index]
