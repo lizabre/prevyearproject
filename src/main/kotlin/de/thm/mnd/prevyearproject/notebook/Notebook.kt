@@ -1,5 +1,6 @@
-package de.thm.mnd.prevyearproject.prevyearproject.notebook
+package de.thm.mnd.prevyearproject.notebook
 
+import de.thm.mnd.prevyearproject.note.Note
 import java.util.Date
 import java.util.UUID
 
@@ -8,5 +9,5 @@ data class Notebook(
     val name: String,
     val createdAt: Date,
     val userId: UUID,
-    val notes: MutableList<String> // change to Note data class
+    val notes: MutableList<Note>
 )

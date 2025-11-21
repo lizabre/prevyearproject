@@ -1,4 +1,4 @@
-package de.thm.mnd.prevyearproject.prevyearproject.user
+package de.thm.mnd.prevyearproject.user
 
 import org.springframework.stereotype.Service
 import java.util.UUID

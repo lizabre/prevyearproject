@@ -1,5 +1,6 @@
-package de.thm.mnd.prevyearproject.prevyearproject
+package de.thm.mnd.prevyearproject
 
+import de.thm.mnd.prevyearproject.note.NoteService
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.web.bind.annotation.PostMapping
@@ -10,13 +11,5 @@ import org.springframework.web.bind.annotation.RestController
 class PrevyearprojectApplication
 
 fun main(args: Array<String>) {
-    runApplication<PrevyearprojectApplication>(*args)
-}
-
-@RestController
-@RequestMapping("/notes")
-class NoteController(val noteService: NoteService){
-
-    @PostMapping
-
+    runApplication<de.thm.mnd.prevyearproject.PrevyearprojectApplication>(*args)
 }
