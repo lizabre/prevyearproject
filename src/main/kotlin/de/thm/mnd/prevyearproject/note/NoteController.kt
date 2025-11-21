@@ -31,7 +31,7 @@ class NoteController(val noteService: NoteService) {
     }
 
     @DeleteMapping("/{noteId}")
-    fun deleteNote(@PathVariable notebookId: UUID, @PathVariable noteId: UUID) {
+    fun deleteNote(@PathVariable notebookId: UUID, @PathVariable noteId: UUID): Boolean {
         return noteService.deleteNote(notebookId, noteId)
     }
 }

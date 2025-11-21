@@ -30,11 +30,13 @@ class NoteService(val notebookService: NotebookService) {
     }
 
 
-    fun deleteNote(notebookId: UUID, noteId: UUID){
+    fun deleteNote(notebookId: UUID, noteId: UUID): Boolean{
         val notebook = notebookService.getNotebookById(notebookId)
         if (notebook != null) {
             notebook.notes.removeIf { it.id == noteId }
+            return true
         }
+        return false
     }
 
     fun updateNote(notebookId: UUID, noteId: UUID, updatedNote: NoteRequest ): Note?{
