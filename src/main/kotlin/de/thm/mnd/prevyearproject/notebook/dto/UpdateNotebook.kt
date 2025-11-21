@@ -1,7 +1,6 @@
 package de.thm.mnd.prevyearproject.notebook.dto
 
 import de.thm.mnd.prevyearproject.notebook.Notebook
-import java.util.UUID
 
 data class UpdateNotebook(
     val name: String
