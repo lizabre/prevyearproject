@@ -1,11 +1,13 @@
-package de.thm.mnd.prevyearproject.prevyearproject.notebook
+package de.thm.mnd.prevyearproject.notebook
 
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 
 @RestController
@@ -22,8 +24,8 @@ class NotebookController(val notebookService: NotebookService) {
         return notebookService.createNotebook(newNotebook)
     }
 
-    @PutMapping
-    fun updateNotebook(@RequestBody updateRequest: CreateNotebook): Notebook? {
-        return notebookService.updateNotebook(updateRequest.id, updateRequest.name)
+    @PutMapping("/{id}")
+    fun updateNotebook(@PathVariable id: UUID, @RequestBody updateRequest: UpdateNotebook): Notebook? {
+        return notebookService.updateNotebook(id, updateRequest)
     }
 }

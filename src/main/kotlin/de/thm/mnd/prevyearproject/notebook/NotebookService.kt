@@ -1,13 +1,12 @@
-package de.thm.mnd.prevyearproject.prevyearproject.notebook
+package de.thm.mnd.prevyearproject.notebook
 
+import notebooksDb
 import org.springframework.stereotype.Service
 import java.util.UUID
 
 
 @Service
 class NotebookService {
-
-    private val notebooks = mutableListOf<Notebook>()
 
     fun createNotebook(newNotebook: CreateNotebook): Notebook {
         val id = UUID.randomUUID()
@@ -18,24 +17,27 @@ class NotebookService {
             userId = newNotebook.userId,
             notes = mutableListOf()
         )
-        notebooks.add(notebook)
+        notebooksDb.add(notebook)
         return notebook
     }
 
     fun getAllNotebooks(): List<Notebook> {
-        return notebooks
+        return notebooksDb
+    }
+    fun getNotebookById(id: UUID): Notebook? {
+        return notebooksDb.find { it.id == id }
     }
 
     fun deleteNotebook(id: UUID) {
-        notebooks.removeIf { it.id == id }
+        notebooksDb.removeIf { it.id == id }
     }
 
-    fun updateNotebook(updatedNotebook: UpdateNotebook): Notebook? {
-        val index = notebooks.indexOfFirst { it.id == updatedNotebook.id }
+    fun updateNotebook(id: UUID, updatedNotebook: UpdateNotebook): Notebook? {
+        val index = notebooksDb.indexOfFirst { it.id == id}
         if (index != -1) {
-            val notebookToUpdate = notebooks[index]
+            val notebookToUpdate = notebooksDb[index]
             val updatedNotebook = notebookToUpdate.copy(name = updatedNotebook.name)
-            notebooks[index] = updatedNotebook
+            notebooksDb[index] = updatedNotebook
             return updatedNotebook
         }
         return null

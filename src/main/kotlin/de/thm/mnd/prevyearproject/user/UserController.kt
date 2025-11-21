@@ -1,4 +1,4 @@
-package de.thm.mnd.prevyearproject.prevyearproject.user
+package de.thm.mnd.prevyearproject.user
 
 import de.thm.mnd.prevyearproject.prevyearproject.user.dto.UserRequest
 import de.thm.mnd.prevyearproject.prevyearproject.user.dto.toUser

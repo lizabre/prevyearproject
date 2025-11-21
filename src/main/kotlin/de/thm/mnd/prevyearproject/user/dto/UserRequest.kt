@@ -1,4 +1,4 @@
-package de.thm.mnd.prevyearproject.prevyearproject.user.dto
+package de.thm.mnd.prevyearproject.user.dto
 
 import de.thm.mnd.prevyearproject.prevyearproject.user.User
 import java.util.UUID
