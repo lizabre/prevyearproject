@@ -2,6 +2,7 @@ package de.thm.mnd.prevyearproject.prevyearproject.notebook
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -17,7 +18,12 @@ class NotebookController(val notebookService: NotebookService) {
     }
 
     @PostMapping
-    fun createNotebook(@RequestBody newNotebook: NotebookRequest): Notebook {
+    fun createNotebook(@RequestBody newNotebook: CreateNotebook): Notebook {
         return notebookService.createNotebook(newNotebook)
+    }
+
+    @PutMapping
+    fun updateNotebook(@RequestBody updateRequest: CreateNotebook): Notebook? {
+        return notebookService.updateNotebook(updateRequest.id, updateRequest.name)
     }
 }

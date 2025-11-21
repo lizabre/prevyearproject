@@ -1,6 +1,8 @@
 package de.thm.mnd.prevyearproject.prevyearproject.notebook
 
-data class NotebookRequest(
+import java.util.UUID
+
+data class CreateNotebook(
     val name: String,
-    val userId: Long
+    val userId: UUID
 )
