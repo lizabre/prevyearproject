@@ -9,8 +9,8 @@ class NotebookService {
 
     private val notebooks = mutableListOf<Notebook>()
 
-    fun createNotebook(newNotebook: NotebookRequest): Notebook {
-        val id = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
+    fun createNotebook(newNotebook: CreateNotebook): Notebook {
+        val id = UUID.randomUUID()
         val notebook = Notebook(
             id = id,
             name = newNotebook.name,
@@ -26,15 +26,15 @@ class NotebookService {
         return notebooks
     }
 
-    fun deleteNotebook(id: Long) {
+    fun deleteNotebook(id: UUID) {
         notebooks.removeIf { it.id == id }
     }
 
-    fun updateNotebook(id: Long, name: String): Notebook? {
-        val index = notebooks.indexOfFirst { it.id == id }
+    fun updateNotebook(updatedNotebook: UpdateNotebook): Notebook? {
+        val index = notebooks.indexOfFirst { it.id == updatedNotebook.id }
         if (index != -1) {
             val notebookToUpdate = notebooks[index]
-            val updatedNotebook = notebookToUpdate.copy(name = name)
+            val updatedNotebook = notebookToUpdate.copy(name = updatedNotebook.name)
             notebooks[index] = updatedNotebook
             return updatedNotebook
         }
