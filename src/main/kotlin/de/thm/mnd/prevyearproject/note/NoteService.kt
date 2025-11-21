@@ -10,45 +10,50 @@ import java.util.UUID
 @Service
 class NoteService(val notebookService: NotebookService) {
 
-
-    fun createNote(note: NoteRequest){
+    fun createNote(notebookId: UUID, note: NoteRequest): Note{
         val note = Note(
             id = UUID.randomUUID(),
             createdAt = java.util.Date(),
             modifiedAt = LocalDateTime.now(),
             name = note.name,
             text = note.text,
-            notebookId = note.notebookId
         )
-        val notebook = notebooksDb.find { it.id == note.notebookId }
+        val notebook = notebooksDb.find { it.id == notebookId }
         if (notebook != null) {
             notebook.notes.add(note)
         }
-
+        return note
     }
 
-//    fun getAllNotes(): List<Note>{
-//        return notebooksDb.map { it -> it.notes }.flatten()
-//    }
-//    fun getNote(id: UUID) : Note?{
-//        for (note in noteList){
-//            if(note.id == id){
-//                return note
-//            }
-//        }
-//        return null
-//    }
+    fun getAllNotesOfNotebook(id: UUID): List<Note>{
+        return notebookService.getNotebookById(id)?.notes ?: emptyList()
+    }
 
-//    fun deleteNote(note: Note){
-//        noteList.remove(note)
-//    }
-//    fun updateNote(noteId: UUID , updatedNote: NoteRequest ){
-//        val note = getNote(noteId)
-//        if (note != null) {
-//            note.name = updatedNote.name
-//            note.text = updatedNote.text
-//            note.modifiedAt = LocalDateTime.now()
-//        }
-//    }
 
+    fun deleteNote(notebookId: UUID, noteId: UUID){
+        val notebook = notebookService.getNotebookById(notebookId)
+        if (notebook != null) {
+            notebook.notes.removeIf { it.id == noteId }
+        }
+    }
+
+    fun updateNote(notebookId: UUID, noteId: UUID, updatedNote: NoteRequest ): Note?{
+       val notebook = notebookService.getNotebookById(notebookId)
+        print(notebook)
+        if (notebook != null) {
+            val noteToUpdate = notebook.notes.find { it.id == noteId }
+            if (noteToUpdate != null) {
+                val index = notebook.notes.indexOfFirst { it.id == noteId }
+                val newNote = noteToUpdate.copy(
+                    name = updatedNote.name,
+                    text = updatedNote.text,
+                    modifiedAt = LocalDateTime.now()
+                )
+                notebook.notes[index] = newNote
+                return newNote
+            }
+
+        }
+        return null
+    }
 }

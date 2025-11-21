@@ -1,6 +1,6 @@
 package de.thm.mnd.prevyearproject.notebook
 
-import de.thm.mnd.prevyearproject.prevyearproject.note.Note
+import de.thm.mnd.prevyearproject.note.Note
 import java.util.Date
 import java.util.UUID
 

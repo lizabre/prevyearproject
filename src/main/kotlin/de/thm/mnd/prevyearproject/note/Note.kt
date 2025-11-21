@@ -12,5 +12,4 @@ data class Note(
     var modifiedAt: LocalDateTime,
     var name: String,
     var text: String,
-    val notebookId: UUID
 )
