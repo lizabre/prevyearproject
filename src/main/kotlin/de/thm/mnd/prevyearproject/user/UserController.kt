@@ -1,7 +1,6 @@
 package de.thm.mnd.prevyearproject.user
 
-import de.thm.mnd.prevyearproject.user.dto.UserRequest
-import de.thm.mnd.prevyearproject.user.dto.toUser
+import de.thm.mnd.prevyearproject.user.dto.UserDTO
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,14 +15,39 @@ import java.util.UUID
 @RestController
 @RequestMapping("/users")
 class UserController(val userService: UserService) {
+
+    private fun User.toDTO(): UserDTO = UserDTO(
+        id = this.id,
+        firstName = this.firstName,
+        lastName = this.lastName,
+        email = this.email
+    )
     @GetMapping
-    fun getAllUsers(): List<User> = userService.getAllUsers();
+    fun getAllUsers(): List<UserDTO> {
+        return userService.getAllUsers().map { it.toDTO() }
+    };
     @GetMapping("/{id}")
-    fun getUserById(@PathVariable id: UUID): User? = userService.getUserById(id);
+    fun getUserById(@PathVariable id: UUID): UserDTO? {
+        return userService.getUserById(id)?.toDTO()
+    };
     @PostMapping
-    fun createUser(@RequestBody user: UserRequest): User = userService.save(user.toUser());
+    fun createUser(@RequestBody user: UserDTO): UserDTO {
+        val user = User(
+            firstName = user.firstName,
+            lastName = user.lastName,
+            email = user.email
+        )
+        return userService.createUser(user).toDTO()
+    };
     @PutMapping("/{id}")
-    fun updateUser(@PathVariable id: UUID, @RequestBody user: UserRequest): User? = userService.update(user.toUser(id));
+    fun updateUser(@PathVariable id: UUID, @RequestBody user: UserDTO): UserDTO? {
+        val updatedUser = User(
+            firstName = user.firstName,
+            lastName = user.lastName,
+            email = user.email
+        )
+        return userService.updateUser(id, updatedUser)?.toDTO()
+    }
     @DeleteMapping("/{id}")
-    fun deleteUser(@PathVariable id: UUID): Boolean = userService.delete(id);
+    fun deleteUser(@PathVariable id: UUID): Unit = userService.deleteUser(id);
 }

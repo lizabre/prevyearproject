@@ -1,50 +1,35 @@
 package de.thm.mnd.prevyearproject.notebook
 
-import notebooksDb
 import org.springframework.stereotype.Service
 import java.util.UUID
 
 
 @Service
-class NotebookService {
-
-    fun createNotebook(newNotebook: Notebook): Notebook {
-        val id = UUID.randomUUID()
-        val notebook = Notebook(
-            id = id,
-            name = newNotebook.name,
-            createdAt = java.util.Date(),
-            userId = newNotebook.userId,
-            notes = mutableListOf()
-        )
-        notebooksDb.add(notebook)
-        return notebook
-    }
-
-    fun getAllNotebooks(): List<Notebook> {
-        return notebooksDb
-    }
+class NotebookService(private val notebookRepository: NotebookRepository) {
     fun getNotebookById(id: UUID): Notebook? {
-        return notebooksDb.find { it.id == id }
+        return notebookRepository.findById(id).orElse(null)
     }
 
-    fun deleteNotebook(id: UUID): Boolean {
-        val existing = notebooksDb.find { it.id == id };
-        if(existing != null) {
-            notebooksDb.remove(existing);
-            return true;
-        }
-        return false;
+    fun createNotebook(notebook: Notebook): Notebook {
+        return notebookRepository.save(notebook)
     }
 
+    fun deleteNotebook(id: UUID) {
+        notebookRepository.deleteById(id)
+    }
+    fun getAllNotebooks(): List<Notebook> {
+        return notebookRepository.findAll().toList()
+    }
     fun updateNotebook(id: UUID, updatedNotebook: Notebook): Notebook? {
-        val index = notebooksDb.indexOfFirst { it.id == id}
-        if (index != -1) {
-            val notebookToUpdate = notebooksDb[index]
-            val updatedNotebook = notebookToUpdate.copy(name = updatedNotebook.name)
-            notebooksDb[index] = updatedNotebook
-            return updatedNotebook
+        return if (notebookRepository.existsById(id)) {
+            notebookRepository.save(updatedNotebook)
+        } else {
+            null
         }
-        return null
     }
+
+    fun getNotebooksByUserId(userId: UUID): List<Notebook> {
+        return notebookRepository.findAll().filter { it.user?.id == userId }
+    }
+
 }

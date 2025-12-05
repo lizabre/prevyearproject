@@ -4,30 +4,29 @@ import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
-class UserService{
-    val users = mutableListOf<User>();
-    fun getAllUsers():List<User> = users;
-    fun getUserById(id: UUID):User? = users.find { it.id == id };
-    fun save(user: User): User {
-        users.add(user);
-        return user;
+class UserService(private val userRepository: UserRepository) {
+
+    fun getUserById(id: UUID): User? {
+        return userRepository.findById(id).orElse(null)
     }
-    fun update(user: User): User? {
-        val existingUser = users.find { it.id == user.id }
-        if (existingUser != null) {
-            val ind = users.indexOf(existingUser)
-            users.remove(existingUser)
-            users.add(ind, user)
-            return user
-        }
-        return null
+
+    fun createUser(user: User): User {
+        return userRepository.save(user)
     }
-    fun delete(id: UUID): Boolean {
-        val existingUser = users.find { it.id == id }
-        if (existingUser != null) {
-            users.remove(existingUser)
-            return true
+
+    fun deleteUser(id: UUID) {
+        userRepository.deleteById(id)
+    }
+
+    fun getAllUsers(): List<User> {
+        return userRepository.findAll().toList()
+    }
+
+    fun updateUser(id: UUID, updatedUser: User): User? {
+        return if (userRepository.existsById(id)) {
+            userRepository.save(updatedUser)
+        } else {
+            null
         }
-        return false
     }
 }
